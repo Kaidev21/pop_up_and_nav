@@ -49,34 +49,7 @@ class _MyHomePageState extends State<MyHomePage> {
           children: <Widget>[
              ElevatedButton(
                 onPressed: () {
-                  final alert = AlertDialog(
-                    title: Text("Ma première alerte"),
-                    content: Text("J'ai créé ma première alerte"),
-                    actions: [
-                      TextButton(
-                          onPressed: (){
-                            Navigator.of(context).pop();
-                          },
-                          child: Text("OK")
-                      ),
-                      TextButton(
-                          onPressed: (){
-                            Navigator.of(context).pop();
-                            setState((){
-                              appBarColor = (appBarColor == Colors.lightBlueAccent)
-                                  ? Colors.lightGreenAccent : Colors.lightBlueAccent;
-                            });
-                          },
-                          child: Text("Changer le AppBar")
-                      )
-                    ],
-                  );
-                  showDialog(
-                      context: context,
-                      barrierDismissible: false,
-                      builder: (BuildContext ctx) {
-                    return alert;
-                      });
+                  showMyDialog(alert: createAlert());
                 },
                 child: Text("Montrer une Alerte")
             )
@@ -94,8 +67,6 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   SnackBar createSnack({required String text}) {
-
-
 
     final content = Row(
       mainAxisSize: MainAxisSize.max,
@@ -124,5 +95,39 @@ class _MyHomePageState extends State<MyHomePage> {
       behavior: SnackBarBehavior.floating,
     );
     return snack;
+  }
+
+  AlertDialog createAlert() {
+   return AlertDialog(
+     title: Text("Ma première alerte"),
+     content: Text("J'ai créé ma première alerte"),
+     actions: [
+       TextButton(
+           onPressed: (){
+             Navigator.of(context).pop();
+           },
+           child: Text("OK")
+       ),
+       TextButton(
+           onPressed: (){
+             Navigator.of(context).pop();
+             setState((){
+               appBarColor = (appBarColor == Colors.lightBlueAccent)
+                   ? Colors.lightGreenAccent : Colors.lightBlueAccent;
+             });
+           },
+           child: Text("Changer le AppBar")
+       )
+     ],
+   );;
+  }
+
+  Future<void> showMyDialog({required AlertDialog alert}) async{
+   await showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext ctx) {
+          return alert;
+        });
   }
 }
