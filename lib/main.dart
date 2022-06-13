@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'next.dart';
+
 void main() {
   runApp(const MyApp());
 }
@@ -48,11 +50,28 @@ class _MyHomePageState extends State<MyHomePage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
              ElevatedButton(
-                onPressed: () {
-                  showMyDialog(alert: createAlert());
-                },
+                onPressed: ( ()=> showMyDialog(dialog: createAlert())),
                 child: Text("Montrer une Alerte")
-            )
+            ),
+            Divider(),
+            ElevatedButton(
+              onPressed: () {
+                showMyDialog(dialog: createSimple());
+              },
+              child: Text("Montrer simple"),
+            ),
+            Divider(),
+            ElevatedButton(
+                onPressed: (){
+                  final nextPage = Next(color: appBarColor);
+                  Navigator.of(context).push(
+                      MaterialPageRoute(builder: (BuildContext ctx) {
+                        return nextPage;
+                      })
+                  );
+                },
+                child: Text("Passer à la page suivante")
+            ),
           ],
         ),
       ),
@@ -108,6 +127,7 @@ class _MyHomePageState extends State<MyHomePage> {
            },
            child: Text("OK")
        ),
+
        TextButton(
            onPressed: (){
              Navigator.of(context).pop();
@@ -122,12 +142,39 @@ class _MyHomePageState extends State<MyHomePage> {
    );;
   }
 
-  Future<void> showMyDialog({required AlertDialog alert}) async{
+  Future<void> showMyDialog({required Widget dialog}) async{
    await showDialog(
         context: context,
         barrierDismissible: false,
         builder: (BuildContext ctx) {
-          return alert;
+          return dialog;
         });
   }
+
+  SimpleDialog createSimple() {
+    final simple = SimpleDialog(
+      title: Text("Je suis un simple dialog"),
+      elevation: 15,
+      children: [
+        Icon(Icons.group, color: appBarColor, size: 35,),
+        Text("Je suis comme une colonnne"),
+        Divider(),
+        Text("Mais je suis dans un pop up"),
+        Divider(),
+        option()
+      ],
+    );
+
+    return simple;
+  }
+
+  SimpleDialogOption option() {
+    return SimpleDialogOption(
+      onPressed: (){
+        Navigator.of(context).pop();
+      },
+      child: Text("OK"),
+    );
+  }
+
 }
